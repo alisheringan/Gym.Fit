@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GymFit — учёт посещений</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- ===== Sidebar ===== -->
+  <aside class="sidebar">
+    <div class="brand">
+      <span class="brand-mark">GYM</span><span class="brand-mark brand-mark--accent">FIT</span>
+      <div class="brand-sub">учёт посещений</div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item is-active" data-tab="checkin">
+        <span class="nav-num">01</span> Регистрация
+      </button>
+      <button class="nav-item" data-tab="clients">
+        <span class="nav-num">02</span> Клиенты
+      </button>
+      <button class="nav-item" data-tab="zones">
+        <span class="nav-num">03</span> Зоны
+      </button>
+      <button class="nav-item" data-tab="analytics">
+        <span class="nav-num">04</span> Аналитика
+      </button>
+      <button class="nav-item" data-tab="calendar">
+        <span class="nav-num">05</span> Календарь
+      </button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <span id="clockOut">--:--:--</span>
+      <span id="dateOut">--</span>
+    </div>
+  </aside>
+
+  <!-- ===== Main ===== -->
+  <main class="main">
+
+    <div id="toast" class="toast"></div>
+
+    <!-- ---------- Вкладка: Регистрация визита ---------- -->
+    <section class="panel is-active" id="panel-checkin">
+      <header class="panel-head">
+        <h1>Регистрация визита</h1>
+        <p class="panel-sub">Отметить вход клиента в зону</p>
+      </header>
+
+      <div class="scoreboard">
+        <div class="scoreboard-num" id="todayCount">—</div>
+        <div class="scoreboard-label">визитов сегодня</div>
+      </div>
+
+      <div class="card form-card">
+        <div class="field-row">
+          <div class="field">
+            <label>Клиент</label>
+            <select id="checkinClient"></select>
+          </div>
+          <div class="field">
+            <label>Зона</label>
+            <select id="checkinZone"></select>
+          </div>
+          <button class="btn btn--accent" id="checkinSubmit">Отметить вход</button>
+        </div>
+        <div id="checkinMsg" class="msg"></div>
+      </div>
+
+      <h2 class="section-title">Последние визиты</h2>
+      <div class="card table-card">
+        <table class="roster" id="visitsTable">
+          <thead>
+            <tr><th>Время</th><th>Клиент</th><th>Зона</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p class="empty-state" id="visitsEmpty">Пока нет визитов — отметьте первый вход выше.</p>
+      </div>
+    </section>
+
+    <!-- ---------- Вкладка: Клиенты ---------- -->
+    <section class="panel" id="panel-clients">
+      <header class="panel-head">
+        <h1>Клиенты</h1>
+        <p class="panel-sub">База клиентов и их абонементы</p>
+      </header>
+
+      <div class="card form-card">
+        <p class="card-title">Новый клиент</p>
+        <div class="field-row">
+          <div class="field field--grow">
+            <label>ФИО *</label>
+            <input type="text" id="newClientName" placeholder="Иванов Иван">
+          </div>
+          <div class="field">
+            <label>Телефон</label>
+            <input type="text" id="newClientPhone" placeholder="+996 700 000 000">
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input type="text" id="newClientEmail" placeholder="mail@example.com">
+          </div>
+          <button class="btn btn--accent" id="addClientSubmit">Добавить</button>
+        </div>
+        <div id="addClientMsg" class="msg"></div>
+      </div>
+
+      <div class="card table-card">
+        <table class="roster" id="clientsTable">
+          <thead>
+            <tr><th>ФИО</th><th>Телефон</th><th>Email</th><th>Абонемент</th><th></th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ---------- Вкладка: Зоны ---------- -->
+    <section class="panel" id="panel-zones">
+      <header class="panel-head">
+        <h1>Зоны</h1>
+        <p class="panel-sub">Тренажёрный зал, групповые занятия и другие зоны клуба</p>
+      </header>
+
+      <div class="card form-card">
+        <p class="card-title">Новая зона</p>
+        <div class="field-row">
+          <div class="field field--grow">
+            <label>Название *</label>
+            <input type="text" id="newZoneName" placeholder="Например, Йога">
+          </div>
+          <div class="field field--grow">
+            <label>Описание</label>
+            <input type="text" id="newZoneDesc" placeholder="Короткое описание зоны">
+          </div>
+          <button class="btn btn--accent" id="addZoneSubmit">Добавить</button>
+        </div>
+        <div id="addZoneMsg" class="msg"></div>
+      </div>
+
+      <div class="zone-grid" id="zoneGrid"></div>
+    </section>
+
+    <!-- ---------- Вкладка: Аналитика ---------- -->
+    <section class="panel" id="panel-analytics">
+      <header class="panel-head">
+        <h1>Аналитика</h1>
+        <p class="panel-sub">Загруженность клуба за выбранный период</p>
+      </header>
+
+      <div class="card form-card">
+        <div class="field-row">
+          <div class="field">
+            <label>С даты</label>
+            <input type="date" id="analyticsFrom">
+          </div>
+          <div class="field">
+            <label>По дату</label>
+            <input type="date" id="analyticsTo">
+          </div>
+          <button class="btn btn--ghost" id="analyticsRefresh">Обновить отчёты</button>
+        </div>
+      </div>
+
+      <div class="analytics-grid">
+        <div class="card">
+          <p class="card-title">Популярность зон</p>
+          <div id="zoneBars" class="bar-list"></div>
+        </div>
+
+        <div class="card">
+          <p class="card-title">Загруженность по дням недели</p>
+          <div id="weekdayBars" class="bar-list"></div>
+        </div>
+
+        <div class="card card--wide">
+          <p class="card-title">Топ-5 клиентов за текущий месяц</p>
+          <div id="topClients" class="rank-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---------- Вкладка: Календарь ---------- -->
+    <section class="panel" id="panel-calendar">
+      <header class="panel-head">
+        <h1>Календарь</h1>
+        <p class="panel-sub">Кто и когда тренируется — по дням месяца</p>
+      </header>
+
+      <div class="cal-toolbar">
+        <button class="btn btn--ghost btn--small" id="calPrev">←</button>
+        <div class="cal-month-label" id="calMonthLabel">—</div>
+        <button class="btn btn--ghost btn--small" id="calNext">→</button>
+        <button class="btn btn--ghost btn--small" id="calToday">Сегодня</button>
+      </div>
+
+      <div class="card" style="padding: 16px;">
+        <div class="cal-weekdays">
+          <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+
+      <h2 class="section-title" id="calDayTitle">Визиты</h2>
+      <div class="card table-card">
+        <table class="roster" id="calDayTable">
+          <thead>
+            <tr><th>Время</th><th>Клиент</th><th>Зона</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p class="empty-state" id="calDayEmpty">Выберите день в календаре выше.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

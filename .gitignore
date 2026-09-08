@@ -1,0 +1,70 @@
+# ==========================
+# Python
+# ==========================
+__pycache__/
+*.pyo
+*.pyd
+*.so
+
+# Virtual Environment
+venv/
+.venv/
+env/
+backend/venv/
+
+# Environment variables
+.env
+.env.*
+
+# Cache
+.pytest_cache/
+.mypy_cache/
+.cache/
+
+# ==========================
+# Node.js
+# ==========================
+node_modules/
+dist/
+build/
+
+# ==========================
+# IDE
+# ==========================
+.vscode/
+.idea/
+*.iml
+
+# ==========================
+# OS
+# ==========================
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ==========================
+# Logs
+# ==========================
+*.log
+logs/
+
+# ==========================
+# Python build
+# ==========================
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# ==========================
+# SQLite
+# ==========================
+*.db
+*.sqlite3
+
+# ==========================
+# Temporary files
+# ==========================
+tmp/
+temp/
+*.swp
+*.bak
